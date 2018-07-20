@@ -28,17 +28,31 @@ namespace socket
         {
             try
             {   // Abrir el Archivo Utilizando StreamReader.
-                using (StreamReader sr = new StreamReader("C:\\ArchivoPrueba.txt"))
+                using (StreamReader sr = new StreamReader(textBox1.Text))
                 {
-                    // Read the stream to a string, and write the string to the console.
-                    String line = sr.ReadToEnd();
-                    MessageBox.Show("Archivo Leido: " + Environment.NewLine + line);
+                    // Leer el Archivo y Mostrar la Informacion del Documento.
+                    String linea = sr.ReadToEnd();
+                    MessageBox.Show("Archivo Leido: " + Environment.NewLine + linea);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("El Archivo No Pudo Ser Leido");
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog abrirarchivo = new OpenFileDialog();
+            abrirarchivo.Title = "Seleccione El Archivo de Texto";
+            abrirarchivo.Filter = "Documentos de Texto (*.txt)|*.txt";
+            abrirarchivo.FileName = textBox1.Text;
+
+            if (abrirarchivo.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.textBox1.Text = abrirarchivo.FileName;
             }
         }
 
