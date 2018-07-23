@@ -137,6 +137,7 @@ namespace socket
             documento.LoadXml(textBox5.Text);
             documento.PreserveWhitespace = true;
             documento.Save("data.xml");
+            MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
         }
     }
 }
