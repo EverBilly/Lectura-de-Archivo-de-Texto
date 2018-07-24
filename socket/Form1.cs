@@ -139,5 +139,46 @@ namespace socket
             documento.Save("data.xml");
             MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //FUNCIONA GUARDAR ARCHIVO TXT
+            //StreamWriter crear = new StreamWriter("data.txt");
+            //string contenido = textBox4.Text;
+            //crear.Write(contenido.ToString());
+            //crear.Flush();
+            //crear.Close();
+            //MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
+            try
+            {
+                StreamWriter crear = new StreamWriter("data.txt");
+                string[] contenido = new string [Convert.ToInt32(textBox4.Text)];
+                char abierto = '[';
+                char cerrado = ']';
+                int contador = 0;
+
+                    crear.Write(contenido.ToString());
+                    crear.Flush();
+                    crear.Close();
+                    MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
+                }
+            catch (Exception ex)
+            {
+                MessageBox.Show("" + ex);
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            string valor ="";
+            if (valor == "[" || valor == "]")
+            {
+                MessageBox.Show("Hay LLaves: ");
+            }
+            else
+            {
+                MessageBox.Show("No Hay");
+            }
+        }
     }
 }
