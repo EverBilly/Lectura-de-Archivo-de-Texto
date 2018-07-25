@@ -100,21 +100,30 @@ namespace socket
        //CARGAR ARCHIVO XML
         public void XML()
         {
-            XElement root = new XElement(Convert.ToString(textBox2.Text).Trim());
-            foreach (string line in File.ReadAllLines(textBox1.Text)) {
-                string[] fields = line.Split('|');
-                XElement record = new XElement(Convert.ToString(textBox3.Text).Trim());
-                int pos = 0;
-                foreach (String sp in fields)
+            try
+            {
+
+                XElement root = new XElement(Convert.ToString(textBox2.Text).Trim());
+                foreach (string line in File.ReadAllLines(textBox1.Text))
                 {
-                    pos += 1;
-                    XElement field = new XElement(string.Format("posicion", pos.ToString()), new XAttribute("att", "content"), new XAttribute("name", "SAT")); // prepare child nodes
-                    field.Add(sp);
-                    record.Add(field); // add to parent node
+                    string[] fields = line.Split('|');
+                    XElement record = new XElement(Convert.ToString(textBox3.Text).Trim());
+                    int pos = 0;
+                    foreach (String sp in fields)
+                    {
+                        pos += 1;
+                        XElement field = new XElement(string.Format("posicion", pos.ToString()), new XAttribute("att", "content"), new XAttribute("name", "SAT")); // prepare child nodes
+                        field.Add(sp);
+                        record.Add(field); // add to parent node
+                    }
+                    root.Add(record);
                 }
-                root.Add(record);
+                textBox5.Text = (root.ToString());  // display the result on console
             }
-            textBox5.Text = (root.ToString());  // display the result on console
+            catch (Exception e)
+            {
+                MessageBox.Show("Error Debe Llenar Los Campos" + e);
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -170,15 +179,10 @@ namespace socket
 
         private void button7_Click(object sender, EventArgs e)
         {
-            string valor ="";
-            if (valor == "[" || valor == "]")
-            {
-                MessageBox.Show("Hay LLaves: ");
-            }
-            else
-            {
-                MessageBox.Show("No Hay");
-            }
+            string lineas = textBox4.Text;
+
+            string arreglado = lineas.Replace('[', '<').Replace(']', '>');
+            MessageBox.Show(arreglado);
         }
     }
 }
