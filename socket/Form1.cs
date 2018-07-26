@@ -17,6 +17,9 @@ namespace socket
 {
     public partial class Form1 : Form
     {
+
+        string UbicacionArchivo = ConfigurationManager.ConnectionStrings["UbicacionArchivo"].ConnectionString;
+
         public Form1()
         {
             InitializeComponent();
@@ -25,17 +28,19 @@ namespace socket
         private void Form1_Load(object sender, EventArgs e)
         {
 
+            textBox1.Text = Convert.ToString(UbicacionArchivo);
         }
 
         private void btnConexion_Click(object sender, EventArgs e)
         {
+
             try
             {   // Abrir el Archivo Utilizando StreamReader.
-                using (StreamReader sr = new StreamReader(textBox1.Text))
+                using (StreamReader sr = new StreamReader(UbicacionArchivo))
                 {
                     // Leer el Archivo y Mostrar la Informacion del Documento.
                     String linea = sr.ReadToEnd();
-                    textBox4.Text = ("Archivo Leido: " + Environment.NewLine + linea);
+                    richTextBox1.Text = (linea);
                 }
             }
             catch (Exception ex)
@@ -118,7 +123,7 @@ namespace socket
                     }
                     root.Add(record);
                 }
-                textBox5.Text = (root.ToString());  // display the result on console
+                richTextBox2.Text = (root.ToString());  // display the result on console
             }
             catch (Exception e)
             {
@@ -143,7 +148,7 @@ namespace socket
         private void button5_Click(object sender, EventArgs e)
         {
             XmlDocument documento = new XmlDocument();
-            documento.LoadXml(textBox5.Text);
+            documento.LoadXml(richTextBox2.Text);
             documento.PreserveWhitespace = true;
             documento.Save("data.xml");
             MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
@@ -152,37 +157,63 @@ namespace socket
         private void button6_Click(object sender, EventArgs e)
         {
             //FUNCIONA GUARDAR ARCHIVO TXT
-            //StreamWriter crear = new StreamWriter("data.txt");
-            //string contenido = textBox4.Text;
-            //crear.Write(contenido.ToString());
-            //crear.Flush();
-            //crear.Close();
-            //MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
-            try
+            StreamWriter crear = new StreamWriter("data.txt");
+            string contenido = richTextBox1.Text;
+            if (contenido != "")
             {
-                StreamWriter crear = new StreamWriter("data.txt");
-                string[] contenido = new string [Convert.ToInt32(textBox4.Text)];
-                char abierto = '[';
-                char cerrado = ']';
-                int contador = 0;
-
-                    crear.Write(contenido.ToString());
-                    crear.Flush();
-                    crear.Close();
-                    MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
-                }
-            catch (Exception ex)
+                crear.Write(contenido.ToString());
+                crear.Flush();
+                crear.Close();
+                MessageBox.Show("ARCHIVO GUARDADO EXITOSAMENTE");
+            }
+            else
             {
-                MessageBox.Show("" + ex);
+                MessageBox.Show("ARCHIVO VACIO");
             }
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            string lineas = textBox4.Text;
+            string lineas = richTextBox1.Text;
 
             string arreglado = lineas.Replace('[', '<').Replace(']', '>');
             MessageBox.Show(arreglado);
+        }
+
+        private bool CompararArchivos(string archivo1, string archivo2)
+        {
+            int archivo1_bytes, archivo2_bytes;
+            FileStream archivo1s, archivo2s;
+
+            if (archivo1 == archivo2)
+            {
+
+                MessageBox.Show("Son Iguales");
+                return true;
+            }
+            archivo1s = new FileStream(archivo1, FileMode.Open);
+            archivo2s = new FileStream(archivo2, FileMode.Open);
+
+            if (archivo1s.Length != archivo2s.Length)
+            {
+                archivo1s.Close();
+                archivo2s.Close();
+                MessageBox.Show("No Son Iguales");
+                return false;
+            }
+
+            do
+            {
+                archivo1_bytes = archivo1s.ReadByte();
+                archivo2_bytes = archivo2s.ReadByte();
+            }
+
+            while ((archivo1_bytes == archivo2_bytes) && (archivo1_bytes != -1));
+
+            archivo1s.Close();
+            archivo2s.Close();
+
+            return((archivo1_bytes - archivo2_bytes) == 0);
         }
     }
 }
