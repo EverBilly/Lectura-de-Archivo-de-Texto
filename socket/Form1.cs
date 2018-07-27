@@ -12,13 +12,15 @@ using System.Windows;
 using System.Configuration;
 using System.Xml.Linq;
 using System.Xml;
+using System.Collections.Specialized;
 
 namespace socket
 {
     public partial class Form1 : Form
     {
 
-        string UbicacionArchivo = ConfigurationManager.ConnectionStrings["UbicacionArchivo"].ConnectionString;
+        //string UbicacionArchivo = ConfigurationManager.ConnectionStrings["UbicacionArchivo"].ConnectionString;
+        string UbicacionArchivo = ConfigurationManager.AppSettings["UbicacionArchivo"];
 
         public Form1()
         {
@@ -99,7 +101,8 @@ namespace socket
 
         private void button3_Click(object sender, EventArgs e)
         {
-            textBox3.Text = AppConfig.RecuperaValor(textBox2.Text, "Error");
+            //textBox3.Text = AppConfig.RecuperaValor(textBox2.Text, "Error");
+            ObtenerConfiguracionSeccion();
         }
 
        //CARGAR ARCHIVO XML
@@ -214,6 +217,22 @@ namespace socket
             archivo2s.Close();
 
             return((archivo1_bytes - archivo2_bytes) == 0);
+        }
+
+        public static void ObtenerConfiguracionSeccion()
+        {
+            var aplicacion = ConfigurationManager.GetSection("ElementoXml") as NameValueCollection;
+            if (aplicacion.Count == 0)
+            {
+                MessageBox.Show("No Hay nada");
+            }
+            else
+            {
+                foreach (var llave in aplicacion.AllKeys)
+                {
+                    MessageBox.Show(llave + " " + aplicacion[llave]);
+                }
+            }
         }
     }
 }
